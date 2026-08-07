@@ -1,0 +1,4 @@
+VNs
+Dialogue forward and back controlls
+Choices leading to different outcomes.
+Minigames
