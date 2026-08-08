@@ -1,0 +1,3 @@
+
+
+all the sprites for the scene should be loaded and stored in a Dictionary of sprites Name:sprite value pairs

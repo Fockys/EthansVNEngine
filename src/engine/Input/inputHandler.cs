@@ -2,8 +2,15 @@
 
 using SDL3;
 
-class InputHandler()
+class InputHandler
 {
+
+    ScriptHandler scriptHandler;
+
+    public InputHandler(ScriptHandler scriptHandlerParam)
+    {
+        scriptHandler = scriptHandlerParam;
+    }
 
 
     public int handleInput(SDL.Event e)
@@ -14,6 +21,10 @@ class InputHandler()
             case SDL.Keycode.Escape:
                 return 0;
 
+
+            case SDL.Keycode.Space:
+                scriptHandler.scriptStep();
+                break;
 
             default:
                 break;

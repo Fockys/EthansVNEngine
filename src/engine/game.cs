@@ -11,11 +11,14 @@ class Game
     private SpriteRenderer spriteRenderer = null!;
     private InputHandler inputHandler = null!;
     private TextRenderer textRenderer = null!;
+    private DialogueManager dialogueManager = null!;
     
     private readonly TextureManager textureManager = new();
-    private ScriptHandler scriptHandler = new();
+    
+    private ScriptHandler scriptHandler = null!;
     private readonly Sprite testSprite = new(100,100);
     private readonly Sprite testBack = new(0,0);
+    private Sprite testTextBox = new(0,800);
 
 
     public void Run()
@@ -38,15 +41,18 @@ class Game
         if (!initSDL()) return false;
         if(!initTTF()) return false;
         
-        if (!SDL.CreateWindowAndRenderer(EngineConfig.windowName, 1920, 1080, 0, out window, out renderer))
+        if (!SDL.CreateWindowAndRenderer(EngineConfig.windowName, EngineConfig.windowWidth, EngineConfig.windowHeight, 0, out window, out renderer))
         {
             Console.WriteLine(SDL.GetError());
             return false;
         }
 
+        
         spriteRenderer = new SpriteRenderer(renderer);
-        inputHandler = new InputHandler();
         textRenderer = new TextRenderer(renderer);
+        dialogueManager = new DialogueManager(textRenderer);
+        scriptHandler = new ScriptHandler(dialogueManager);
+        inputHandler = new InputHandler(scriptHandler);
         
         
         SDL.ShowWindow(window);
@@ -73,6 +79,7 @@ class Game
 
             spriteRenderer.drawSprite(testBack);
             spriteRenderer.drawSprite(testSprite,5);
+            spriteRenderer.drawSprite(testTextBox);
             textRenderer.renderAllText();
 
 
@@ -93,16 +100,13 @@ class Game
         
         testSprite.setTexture(textureManager, "testTexture");
         testBack.setTexture(textureManager, "testBackground");
+        SDL.Color tempColor = new() {R=0,G=0,B=0,A=255};
+        testTextBox.setRectangle(renderer,1920,280,tempColor);
+        
 
 
-        textRenderer.addText("text1","Test text",1000,300);
-        textRenderer.setFont("text1",Path.Combine(AppContext.BaseDirectory,"arial.ttf"),52);
-        textRenderer.replaceText("text1","replacement text");
-        textRenderer.updateTexture("text1");
 
-        textRenderer.addText("text2","hello :P",1000,900);
-        textRenderer.setFont("text2",Path.Combine(AppContext.BaseDirectory,"arial.ttf"),80);
-        textRenderer.updateTexture("text2");
+        scriptHandler.loadScript(Path.Combine(AppContext.BaseDirectory,"testScript.txt"));
 
 
     }

@@ -1,5 +1,6 @@
 using SDL3;
 using textureManagerNamespace;
+using engineConfigNameSpace;
 
 //sprite object
 public class Sprite
@@ -30,6 +31,33 @@ public class Sprite
         height = (int)h;
 
         SDL.SetTextureBlendMode(texture,SDL.BlendMode.Blend);
+
+    }
+
+    public void setRectangle(nint renderer, int w, int h, SDL.Color colorParam)
+    {
+        nint surface = SDL.CreateSurface(w, h, EngineConfig.globalPixelFormat);
+        if(surface == nint.Zero)
+        {
+            Console.Error.WriteLine($"CreateSurface failed: {SDL.GetError()}");
+            return;
+        }
+        //make surface filled
+        uint color = SDL.MapSurfaceRGBA(surface, colorParam.R,colorParam.B,colorParam.G,colorParam.A);
+        SDL.FillSurfaceRect(surface,nint.Zero, color); // null rect fills whole surface
+        
+        //make texture from surface and set dimentions
+        texture = SDL.CreateTextureFromSurface(renderer,surface);
+        if(texture == IntPtr.Zero)
+        {
+            Console.Error.WriteLine("failed to make rectangle");
+        }
+        width = w;
+        height = h;
+
+
+        //cleanup
+        SDL.DestroySurface(surface);
 
     }
     public nint GetTexture()

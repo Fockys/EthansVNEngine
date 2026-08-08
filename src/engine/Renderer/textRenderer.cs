@@ -5,7 +5,7 @@ textRenderer holds a dictionary of all currently show text textures
 gameText holds one piece of text including its texture
 
 to create a new text 
-textRenderer.addText() then textRenderer.setFont() then textRenderer.updateFont();
+textRenderer.addText() then textRenderer.setFont() then textRenderer.updateTexture();
 this feels a bit complicated rn so will refine later
 
 */
