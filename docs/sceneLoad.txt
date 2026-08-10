@@ -1,3 +1,9 @@
 
 
 all the sprites for the scene should be loaded and stored in a Dictionary of sprites Name:sprite value pairs
+A array should store the currently visible Sprites, the array should be ordered by the layer they are on, with higher layers on front and 0 being the background
+
+generic scene object that is inherited? maybe
+
+child visualNovelScene
+-> uses the dialogue engine and script interpreter to load the right sprites textures and text and plays it out

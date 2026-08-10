@@ -1,6 +1,7 @@
 
 
 using System.Diagnostics;
+using System.Globalization;
 using System.Text;
 
 class ScriptHandler
@@ -12,12 +13,14 @@ class ScriptHandler
     String[] scriptLines= [""];
     int scriptLinesAmount;
     DialogueManager dialogueManager;
+    CharacterManager characterManager;
 
     string currentCharacter = "";
 
-    public ScriptHandler(DialogueManager dialogueManagerParam)
+    public ScriptHandler(DialogueManager dialogueManagerParam, CharacterManager characterManagerParam)
     {
         dialogueManager = dialogueManagerParam;
+        characterManager = characterManagerParam;
     }
 
 
@@ -49,14 +52,53 @@ class ScriptHandler
             return;
         }
 
-        string[] tokens = scriptLines[currentLine].Split(" ");
+        
 
-        //in the case of change character dialogue
-        if (tokens[0].StartsWith("!"))
+        //check if line is a command
+        if (scriptLines[currentLine].StartsWith("!"))
         {
-            currentCharacter = tokens[0].Substring(1);
+            string[] tokens = scriptLines[currentLine].Split(" "); //split command into tokens
+
+            tokens[0] = tokens[0].Substring(1); //remote leading !
+
+            switch (tokens[0])
+            {
+                case "currentChar":
+                {
+                    currentCharacter = tokens[1];
+                    characterManager.setFocusedCharacter(currentCharacter);
+                    break;
+                }
+                case "loadChar":
+                    {
+                        characterManager.loadCharacter(tokens[1]);
+                        break;
+                    }
+                case "charScale":
+                    {
+   
+                        characterManager.setCharacterScale(currentCharacter,(float)Convert.ToDouble(tokens[1]));
+                        characterManager.setFocusedCharacter(currentCharacter); //set focused again to recalc focused scale
+                        break;
+                    }
+                case "changeSprite":
+                    {
+                        characterManager.setCharacterCurrentSprite(currentCharacter, tokens[1]);
+                        break;
+                    }
+                    //change pos of currently selected character
+                case "changePos":
+                    {
+                        characterManager.changeCharacterPosByCoords(currentCharacter,Convert.ToInt32(tokens[1]),Convert.ToInt32(tokens[2]));
+                        break;
+                    }
+                default:
+                    break;
+            }
+
+            //go to next line
             currentLine++;
-            scriptStep(); //go to next line
+            scriptStep(); 
             return;
         }
 

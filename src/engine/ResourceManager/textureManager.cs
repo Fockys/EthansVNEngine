@@ -9,13 +9,32 @@ public class TextureManager : IDisposable
     //a dictionary of all the textures currently loaded
     private readonly Dictionary<string, IntPtr> textures = new();
 
+    nint renderer;
+
+    public TextureManager(nint rendereParam)
+        {
+            renderer = rendereParam;
+        }
+
+    private static string ResolveAssetPath(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            throw new ArgumentException("Texture path cannot be empty.", nameof(path));
+
+        return Path.IsPathRooted(path)
+            ? path
+            : Path.Combine(EngineConfig.gameDataPath, path);
+    }
+
     //loads a PNG texture, sets its name.
-    public bool LoadPNG(string Name, string Path, nint renderer)
+    public bool LoadPNG(string Name, string Path)
     {
         if (textures.ContainsKey(Name))
             return true; //texture already exists
 
-        nint io = SDL.IOFromFile(Path, "rb");
+        string resolvedPath = ResolveAssetPath(Path);
+
+        nint io = SDL.IOFromFile(resolvedPath, "rb");
         if (io == nint.Zero)
             return false;
 
@@ -36,12 +55,14 @@ public class TextureManager : IDisposable
     }
 
     //loads a JPEG texture, sets its name.
-    public bool LoadJPG(string name, string path, nint renderer)
+    public bool LoadJPG(string name, string path)
     {
         if (textures.ContainsKey(name))
             return true;
 
-        nint io = SDL.IOFromFile(path, "rb");
+        string resolvedPath = ResolveAssetPath(path);
+
+        nint io = SDL.IOFromFile(resolvedPath, "rb");
         if (io == nint.Zero)
             return false;
 

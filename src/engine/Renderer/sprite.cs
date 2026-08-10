@@ -6,6 +6,7 @@ using engineConfigNameSpace;
 public class Sprite
 {
     IntPtr texture;
+    string textureName = null!;
 
     public int x {get;set;}
     public int y {get;set;}
@@ -14,14 +15,15 @@ public class Sprite
     public int layer {get;set;}
 
 
-    public Sprite(int xParam, int yParam){
+    public Sprite(int xParam = 0, int yParam = 0){
         x = xParam;
         y = yParam;
     }
 
 
-    public void setTexture(TextureManager textureManager, string textureName)
+    public void setTexture(TextureManager textureManager, string textureNameParam)
     {
+        textureName = textureNameParam;
         texture = textureManager.Get(textureName);
         float w;
         float h;
@@ -64,6 +66,14 @@ public class Sprite
     {
         return texture;
     }
+
+
+    public void terminate(TextureManager textureManager)
+    {
+        if(textureName == null) return; //texture doesnt exist
+        textureManager.Unload(textureName);
+    }
+
 
 
     

@@ -3,6 +3,8 @@
 
 
 
+using engineConfigNameSpace;
+
 public class DialogueManager
 {
     
@@ -21,7 +23,7 @@ public class DialogueManager
     {
         CharactersShown[name] = true;
         textRenderer.addText(name,$"{name}: {text}",100,900);
-        textRenderer.setFont(name,Path.Combine(AppContext.BaseDirectory,"arial.ttf"),60);
+        textRenderer.setFont(name,Path.Combine(EngineConfig.gameDataPath,"fonts/arial.ttf"),60);
         textRenderer.updateTexture(name);
         currentCharacter = name;
     }

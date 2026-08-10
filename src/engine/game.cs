@@ -12,13 +12,13 @@ class Game
     private InputHandler inputHandler = null!;
     private TextRenderer textRenderer = null!;
     private DialogueManager dialogueManager = null!;
+    private CharacterManager characterManager = null!;
     
-    private readonly TextureManager textureManager = new();
+    private TextureManager textureManager = null!;
     
     private ScriptHandler scriptHandler = null!;
     private readonly Sprite testSprite = new(100,100);
     private readonly Sprite testBack = new(0,0);
-    Character pink = null!;
     private Sprite testTextBox = new(0,800);
 
 
@@ -52,8 +52,12 @@ class Game
         spriteRenderer = new SpriteRenderer(renderer);
         textRenderer = new TextRenderer(renderer);
         dialogueManager = new DialogueManager(textRenderer);
-        scriptHandler = new ScriptHandler(dialogueManager);
+        textureManager = new TextureManager(renderer);
+        characterManager = new CharacterManager(spriteRenderer, textureManager);
+        scriptHandler = new ScriptHandler(dialogueManager, characterManager);
         inputHandler = new InputHandler(scriptHandler);
+        
+        
         
         
         SDL.ShowWindow(window);
@@ -80,7 +84,7 @@ class Game
 
             
             spriteRenderer.drawSprite(testBack);
-            pink.render();
+            characterManager.renderCharacters();
             spriteRenderer.drawSprite(testTextBox);
             
             
@@ -98,25 +102,23 @@ class Game
     {
         
         
-        string imagePath = Path.Combine(AppContext.BaseDirectory, "test.png");
-        textureManager.LoadPNG("testTexture", imagePath, renderer);
-        imagePath = Path.Combine(AppContext.BaseDirectory, "background.jpg");
-        textureManager.LoadJPG("testBackground",imagePath,renderer);
+        string imagePath = Path.Combine(EngineConfig.gameDataPath, "textures/pinkCry.png");
+        textureManager.LoadPNG("testTexture", imagePath);
+        imagePath = Path.Combine(EngineConfig.gameDataPath, "textures/background.jpg");
+        textureManager.LoadJPG("testBackground",imagePath);
         
         testSprite.setTexture(textureManager, "testTexture");
         testBack.setTexture(textureManager, "testBackground");
         SDL.Color tempColor = new() {R=0,G=0,B=0,A=255};
         testTextBox.setRectangle(renderer,1920,280,tempColor);
 
-        pink = new Character(spriteRenderer, "pink");
-        pink.addSprite("pinkSprite",testSprite);
-        pink.spriteScale = 5;
-        pink.setSprite("pinkSprite");
-        
+/*
+        characterManager.loadCharacter("characters/pink.json");
+        characterManager.setCharacterScale("Pink",5);
+        characterManager.setCharacterCurrentSprite("Pink","pinkCry");
+*/
 
-
-
-        scriptHandler.loadScript(Path.Combine(AppContext.BaseDirectory,"testScript.txt"));
+        scriptHandler.loadScript(Path.Combine(EngineConfig.gameDataPath,"scripts/testScript.txt"));
 
 
     }
