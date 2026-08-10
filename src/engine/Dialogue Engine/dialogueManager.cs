@@ -6,7 +6,6 @@
 public class DialogueManager
 {
     
-    string currrentDialogue = "";
     string currentCharacter = "";
     TextRenderer textRenderer;
     Dictionary<string,bool> CharactersShown = new();
@@ -76,6 +75,11 @@ public class DialogueManager
 
         //update character that is in isCharacterShown
         setCharacterText(characterName,dialogue);
+        
+    }
+
+    public void characterEmote()
+    {
         
     }
 

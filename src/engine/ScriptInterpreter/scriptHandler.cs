@@ -59,7 +59,6 @@ class ScriptHandler
             scriptStep(); //go to next line
             return;
         }
-        Console.Error.WriteLine($"{scriptLinesAmount}  {currentLine}");
 
         dialogueManager.characterSay(currentCharacter,scriptLines[currentLine]);
         currentLine++;

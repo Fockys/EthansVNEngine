@@ -18,6 +18,7 @@ class Game
     private ScriptHandler scriptHandler = null!;
     private readonly Sprite testSprite = new(100,100);
     private readonly Sprite testBack = new(0,0);
+    Character pink = null!;
     private Sprite testTextBox = new(0,800);
 
 
@@ -77,9 +78,12 @@ class Game
 
             
 
+            
             spriteRenderer.drawSprite(testBack);
-            spriteRenderer.drawSprite(testSprite,5);
+            pink.render();
             spriteRenderer.drawSprite(testTextBox);
+            
+            
             textRenderer.renderAllText();
 
 
@@ -93,6 +97,7 @@ class Game
     void testing()
     {
         
+        
         string imagePath = Path.Combine(AppContext.BaseDirectory, "test.png");
         textureManager.LoadPNG("testTexture", imagePath, renderer);
         imagePath = Path.Combine(AppContext.BaseDirectory, "background.jpg");
@@ -102,6 +107,11 @@ class Game
         testBack.setTexture(textureManager, "testBackground");
         SDL.Color tempColor = new() {R=0,G=0,B=0,A=255};
         testTextBox.setRectangle(renderer,1920,280,tempColor);
+
+        pink = new Character(spriteRenderer, "pink");
+        pink.addSprite("pinkSprite",testSprite);
+        pink.spriteScale = 5;
+        pink.setSprite("pinkSprite");
         
 
 
