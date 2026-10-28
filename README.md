@@ -1,3 +1,5 @@
+## Abandoned project
+
 This is a project im making for the purpose of my own educational learning
 
 Im making a virtual novel (VN) engine that can be used to make virtual novel games
